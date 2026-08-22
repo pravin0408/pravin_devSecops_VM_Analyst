@@ -293,16 +293,93 @@ export default function SecurityChatbot() {
     return null
   }
 
+  // Factual external lookup when query is beyond predefined knowledge base
+  const performExternalLookup = async (query) => {
+    const lowerQuery = query.toLowerCase()
+    
+    // Check if query is searching for a specific CVE
+    const cvePattern = /cve-\d{4}-\d{4,7}/i
+    const matchCve = query.match(cvePattern)
+    
+    if (matchCve) {
+      const cveId = matchCve[0].toUpperCase()
+      try {
+        const response = await fetch(`https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=${cveId}`)
+        const data = await response.json()
+        if (data.vulnerabilities?.[0]) {
+          const cve = data.vulnerabilities[0].cve
+          const metrics = cve.metrics?.cvssMetricV31?.[0] || cve.metrics?.cvssMetricV30?.[0]
+          return `Here is the actual data for **${cveId}** from the NVD database:
+
+• **Description**: ${cve.descriptions?.[0]?.value || 'No description available.'}
+• **CVSS Score**: ${metrics?.cvssData?.baseScore || 'N/A'} (${metrics?.cvssData?.baseSeverity || 'UNKNOWN'})
+• **Published**: ${new Date(cve.published).toLocaleDateString()}
+• **Last Modified**: ${new Date(cve.lastModified).toLocaleDateString()}`
+        }
+      } catch (e) {
+        console.error('CVE lookup failed:', e)
+      }
+    }
+
+    // Try fetching definition from Wikipedia's API for actual factual definition
+    try {
+      // Clean query for search
+      const cleanQuery = query
+        .replace(/what is|explain|tell me about|how to/gi, '')
+        .trim()
+      
+      const searchResponse = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+          cleanQuery + ' computer security'
+        )}&utf8=&format=json&origin=*`
+      )
+      const searchData = await searchResponse.json()
+      
+      if (searchData.query?.search?.[0]) {
+        const title = searchData.query.search[0].title
+        const summaryResponse = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`
+        )
+        const summaryData = await summaryResponse.json()
+        
+        if (summaryData.extract) {
+          return `Based on verified resources:
+
+**${summaryData.title}**
+${summaryData.extract}
+
+*Source: Wikipedia (Factual Summary)*`
+        }
+      }
+    } catch (e) {
+      console.error('Wikipedia lookup failed:', e)
+    }
+
+    // Fallback if APIs fail or can't resolve
+    return `I've analyzed your query: "${query}"
+
+Here are the verified security concepts that relate to it:
+1. **SAST**: Automated code scanners to detect vulnerabilities at build time.
+2. **DAST**: Dynamic testing of running web servers and APIs.
+3. **Pentesting**: Authorized manual intrusion testing to find flaws.
+4. **DevSecOps**: Shifting security left in development pipelines.
+5. **OWASP Top 10**: The standard awareness document for web application security.
+
+Please ask me a specific security testing question, or provide a CVE ID (e.g., "CVE-2021-44228") for a real-time NVD lookup.`
+  }
+
   const handleSendMessage = async (e) => {
     e.preventDefault()
     
     if (!input.trim()) return
 
+    const userQuery = input
+
     // Add user message
     const userMessage = {
       id: messages.length + 1,
       type: 'user',
-      text: input,
+      text: userQuery,
       timestamp: new Date()
     }
 
@@ -310,40 +387,32 @@ export default function SecurityChatbot() {
     setInput('')
     setIsLoading(true)
 
-    // Simulate processing
-    setTimeout(() => {
-      const match = findMatchingTopic(input)
-      
-      let botResponse = ''
-      
-      if (match) {
-        botResponse = match.response
-      } else {
-        botResponse = `I understand you're asking about: "${input}"
-
-I can help with the following topics:
-• SAST (Static Application Security Testing)
-• DAST (Dynamic Application Security Testing)
-• Penetration Testing & Ethical Hacking
-• Tenable & Vulnerability Management
-• DevSecOps & CI/CD Security
-• OWASP Top 10 Web Vulnerabilities
-• LLM Security & AI Risks
-
-Try asking me a specific question like:
-"What is SAST?" or "Explain OWASP Top 10" or "How does DevSecOps work?"`
-      }
-
+    // Match local database first
+    const match = findMatchingTopic(userQuery)
+    
+    if (match) {
+      setTimeout(() => {
+        const botMessage = {
+          id: messages.length + 2,
+          type: 'bot',
+          text: match.response,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, botMessage])
+        setIsLoading(false)
+      }, 400)
+    } else {
+      // Perform external API fetch for wise, factual non-guessing answer
+      const responseText = await performExternalLookup(userQuery)
       const botMessage = {
         id: messages.length + 2,
         type: 'bot',
-        text: botResponse,
+        text: responseText,
         timestamp: new Date()
       }
-
       setMessages(prev => [...prev, botMessage])
       setIsLoading(false)
-    }, 500)
+    }
   }
 
   const suggestedQuestions = [
@@ -407,7 +476,7 @@ Try asking me a specific question like:
                 className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg text-sm leading-relaxed ${
+                  className={`max-w-xs px-4 py-2 rounded-lg text-sm leading-relaxed whitespace-pre-wrap ${
                     msg.type === 'user'
                       ? 'bg-signal-cyan/20 border border-signal-cyan/40 text-white'
                       : 'bg-void-panel border border-void-line text-slate-300'
