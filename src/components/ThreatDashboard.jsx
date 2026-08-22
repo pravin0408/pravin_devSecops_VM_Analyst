@@ -86,7 +86,7 @@ function ThreatIntelligence() {
                 <a 
                   href={`https://nvd.nist.gov/vuln/detail/${cve.id}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="font-mono text-sm text-signal-cyan hover:underline"
                 >
                   {cve.id}
@@ -115,7 +115,7 @@ function ThreatIntelligence() {
         <a 
           href="https://nvd.nist.gov/vuln/search?pubStartDate=2026-01-01&pubEndDate=2026-12-31"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="text-xs text-signal-cyan hover:underline flex items-center gap-1"
         >
           View all 2026 CVEs on NVD →
@@ -135,11 +135,11 @@ export default function ThreatDashboard() {
             Current Threat Landscape
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
-            Live 2026 vulnerability feeds, Tenable.io infrastructure vulnerability management, and CIS benchmark automation
+            Live 2026 vulnerability feeds and emerging threats across the security landscape
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6 mb-12">
           {/* Live CVE Feed */}
           <div className="lg:col-span-2">
             <ThreatIntelligence />
@@ -203,220 +203,83 @@ export default function ThreatDashboard() {
           </div>
         </div>
 
-        {/* Infrastructure Vulnerabilities Section */}
-        <div className="mt-12">
-          <div className="panel p-6 hover-glow">
-            <h3 className="font-display text-xl font-600 text-white mb-4">Infrastructure Vulnerabilities</h3>
-            <p className="text-sm text-slate-400 mb-6">Most frequently detected infrastructure vulnerabilities via Tenable.io scanning across production environments:</p>
-            
+        {/* CIS Benchmark Information */}
+        <div className="panel p-6 hover-glow border-signal-green/20">
+          <h3 className="font-display text-2xl font-600 text-white mb-6">CIS Benchmark Framework</h3>
+          <p className="text-sm text-slate-400 mb-6">
+            Center for Internet Security (CIS) provides consensus benchmarks for security hardening across all platforms and technologies:
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              {[
-                { 
-                  name: 'SSL/TLS Weak Ciphers & Protocols', 
-                  plugin: '26928, 20007', 
-                  severity: 'medium', 
-                  assets: 127,
-                  impact: 'Man-in-the-middle attacks, data interception',
-                  remediation: 'Enable TLS 1.2+, disable SSLv3/TLSv1.0'
-                },
-                { 
-                  name: 'Windows Unpatched Systems (KB Missing)', 
-                  plugin: '66334, 97737', 
-                  severity: 'critical', 
-                  assets: 34,
-                  impact: 'Remote code execution, privilege escalation',
-                  remediation: 'Apply latest Windows patches via WSUS or Windows Update'
-                },
-                { 
-                  name: 'SSH Weak MAC/KEX Algorithms Enabled', 
-                  plugin: '90317, 71049', 
-                  severity: 'medium', 
-                  assets: 89,
-                  impact: 'Potential cryptographic weakness exploitation',
-                  remediation: 'Update sshd_config to use only strong algorithms'
-                },
-                { 
-                  name: 'Unsupported Operating System Detection', 
-                  plugin: '33850', 
-                  severity: 'critical', 
-                  assets: 12,
-                  impact: 'No security updates, unpatched known vulnerabilities',
-                  remediation: 'Migrate to supported OS versions (Windows 2019+, Ubuntu 20.04+)'
-                },
-                { 
-                  name: 'HTTP Security Headers Missing', 
-                  plugin: '85582, 97993', 
-                  severity: 'low', 
-                  assets: 203,
-                  impact: 'XSS, clickjacking, MIME type sniffing',
-                  remediation: 'Add: X-Frame-Options, X-Content-Type-Options, CSP headers'
-                },
-                { 
-                  name: 'Expired/Self-Signed SSL Certificates', 
-                  plugin: '15901, 57582', 
-                  severity: 'high', 
-                  assets: 18,
-                  impact: 'Service outages, client connection failures',
-                  remediation: 'Renew certificates via Let\'s Encrypt or commercial CA'
-                },
-                { 
-                  name: 'SMBv1 Protocol Enabled (EternalBlue)', 
-                  plugin: '96982', 
-                  severity: 'critical', 
-                  assets: 7,
-                  impact: 'Ransomware propagation, network-wide compromise',
-                  remediation: 'Disable SMBv1 via Group Policy or registry'
-                },
-                { 
-                  name: 'Apache HTTP Server Multiple Vulns', 
-                  plugin: '119335', 
-                  severity: 'high', 
-                  assets: 42,
-                  impact: 'Remote code execution, directory traversal',
-                  remediation: 'Update Apache to version 2.4.59+ and apply security patches'
-                },
-              ].map((vuln) => (
-                <div key={vuln.plugin} className="border border-void-line rounded-sm p-4 hover:border-signal-cyan/40 transition-all hover-spotlight">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="font-semibold text-white text-sm mb-1">{vuln.name}</div>
-                      <div className="text-xs text-signal-dim">Plugin IDs: {vuln.plugin}</div>
-                    </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-sm border ml-3 severity-${vuln.severity} shrink-0`}>
-                      {vuln.severity.toUpperCase()}
-                    </span>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-3 mb-3 text-xs">
-                    <div>
-                      <span className="text-signal-dim font-semibold">Affected Assets:</span>
-                      <span className="text-signal-amber font-mono ml-2">{vuln.assets}</span>
-                    </div>
-                    <div>
-                      <span className="text-signal-dim font-semibold">Business Impact:</span>
-                      <span className="text-slate-400 ml-2">{vuln.impact}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-void-line/50 text-xs">
-                    <span className="text-signal-dim font-semibold block mb-1">Remediation:</span>
-                    <span className="text-slate-400">{vuln.remediation}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Tenable & CIS Section */}
-        <div className="mt-12 grid md:grid-cols-2 gap-6">
-          {/* Tenable Integration */}
-          <div className="panel p-6 hover-glow">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-sm bg-signal-cyan/10 border border-signal-cyan/30 flex items-center justify-center">
-                <span className="text-signal-cyan font-bold text-lg">T</span>
-              </div>
-              <div>
-                <h3 className="font-display text-xl font-600 text-white">Tenable.io API</h3>
-                <p className="text-xs text-signal-dim">Automated Infrastructure Scanning</p>
-              </div>
-            </div>
-            <p className="text-sm text-slate-400 mb-4 leading-relaxed">
-              Automated vulnerability scanning and compliance monitoring using Tenable.io REST API for continuous infrastructure security assessment
-            </p>
-            <div className="panel p-4 bg-void mb-4">
-              <div className="flex items-center gap-2 mb-2 pb-2 border-b border-void-line">
-                <div className="w-2 h-2 rounded-full bg-signal-red/70" />
-                <div className="w-2 h-2 rounded-full bg-signal-amber/70" />
-                <div className="w-2 h-2 rounded-full bg-signal-green/70" />
-                <span className="ml-2 text-xs text-signal-dim">tenable_infra_scan.py</span>
-              </div>
-              <pre className="text-xs text-slate-300 leading-relaxed overflow-x-auto"><code>{`import requests
-
-# Launch infrastructure vulnerability scan
-response = requests.post(
-    'https://cloud.tenable.com/scans',
-    headers={
-        'X-ApiKeys': 
-        f'accessKey={key};secretKey={sec}'
-    },
-    json={
-        'uuid': template_uuid,
-        'settings': {
-            'name': 'Infrastructure Weekly',
-            'targets': ['10.0.0.0/24', '192.168.0.0/16']
-        }
-    }
-)
-scan_id = response.json()['scan']['id']`}</code></pre>
-            </div>
-            <Link to="/automation" className="text-xs text-signal-cyan hover:underline">
-              View full Tenable infrastructure automation →
-            </Link>
-          </div>
-
-          {/* CIS Benchmark Information */}
-          <div className="panel p-6 hover-glow border-signal-green/20">
-            <h3 className="font-display text-xl font-600 text-white mb-4">CIS Benchmark Framework</h3>
-            <p className="text-sm text-slate-400 mb-4">
-              Center for Internet Security (CIS) provides consensus benchmarks for infrastructure hardening:
-            </p>
-            <div className="space-y-3">
-              <div className="border border-signal-green/30 rounded-sm p-3 bg-signal-green/5">
+              <div className="border border-signal-green/30 rounded-sm p-4 bg-signal-green/5">
                 <div className="font-semibold text-signal-green text-sm mb-2">CIS Ubuntu 20.04 LTS L1</div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Foundational security configuration including filesystem hardening, access control, and service management. 245 individual checks for system hardening and compliance.
+                <p className="text-xs text-slate-400 leading-relaxed mb-2">
+                  Level 1 benchmark for Ubuntu 20.04 LTS provides foundational security configuration including filesystem hardening, access control, and service management. Covers 245 individual checks across system hardening, application security, and compliance requirements.
                 </p>
-              </div>
-
-              <div className="border border-signal-green/30 rounded-sm p-3 bg-signal-green/5">
-                <div className="font-semibold text-signal-green text-sm mb-2">CIS Windows Server 2019</div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Comprehensive hardening guide including domain configuration, local policies, and security settings. 198 checks aligned with DISA STIGs and NIST guidelines.
-                </p>
-              </div>
-
-              <div className="border border-signal-green/30 rounded-sm p-3 bg-signal-green/5">
-                <div className="font-semibold text-signal-green text-sm mb-2">CIS Docker & Kubernetes</div>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Container and orchestration security covering host configuration, image security, and runtime policies. 345+ checks for containerized workloads.
-                </p>
-              </div>
-
-              <div className="text-xs text-slate-500 mt-4 pt-4 border-t border-void-line">
-                <div className="flex items-center justify-between">
-                  <span>Automated scanning via</span>
-                  <span className="text-signal-green font-mono">GitHub Actions + Tenable</span>
+                <div className="text-xs text-signal-dim">
+                  Reference: <a href="https://www.cisecurity.org" target="_blank" rel="noopener noreferrer" className="text-signal-cyan hover:underline">CIS Controls v8</a>
                 </div>
-                <div className="mt-2">Aligned with NIST, DISA STIGs, and PCI-DSS compliance requirements</div>
+              </div>
+
+              <div className="border border-signal-green/30 rounded-sm p-4 bg-signal-green/5">
+                <div className="font-semibold text-signal-green text-sm mb-2">CIS Windows Server 2019</div>
+                <p className="text-xs text-slate-400 leading-relaxed mb-2">
+                  Comprehensive security hardening guide for Windows Server 2019 including domain hardening, local hardening, and compliance configurations. 198 checks ensuring proper access controls, audit policies, and security settings. Aligned with DISA STIGs and NIST guidelines.
+                </p>
+                <div className="text-xs text-signal-dim">
+                  Reference: <a href="https://www.cisecurity.org" target="_blank" rel="noopener noreferrer" className="text-signal-cyan hover:underline">CIS Benchmarks</a>
+                </div>
               </div>
             </div>
+
+            <div className="space-y-3">
+              <div className="border border-signal-green/30 rounded-sm p-4 bg-signal-green/5">
+                <div className="font-semibold text-signal-green text-sm mb-2">CIS Docker Benchmark</div>
+                <p className="text-xs text-slate-400 leading-relaxed mb-2">
+                  Guidance for securing containerized environments covering host configuration, Docker daemon security, Docker images, and runtime configuration. 156 checks ensuring container isolation, secrets management, and resource limits compliance.
+                </p>
+                <div className="text-xs text-signal-dim">
+                  Reference: <a href="https://www.cisecurity.org" target="_blank" rel="noopener noreferrer" className="text-signal-cyan hover:underline">Container Security</a>
+                </div>
+              </div>
+
+              <div className="border border-signal-green/30 rounded-sm p-4 bg-signal-green/5">
+                <div className="font-semibold text-signal-green text-sm mb-2">CIS Kubernetes Benchmark</div>
+                <p className="text-xs text-slate-400 leading-relaxed mb-2">
+                  Security hardening for Kubernetes including control plane, worker nodes, and policies. 189 checks covering API server configuration, RBAC, network policies, and admission control. Critical for production Kubernetes deployments.
+                </p>
+                <div className="text-xs text-signal-dim">
+                  Reference: <a href="https://www.cisecurity.org" target="_blank" rel="noopener noreferrer" className="text-signal-cyan hover:underline">Kubernetes Hardening</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-void-line">
+            <p className="text-xs text-slate-500">
+              CIS Benchmarks are industry-standard compliance frameworks aligned with NIST, DISA STIGs, PCI-DSS, and ISO 27001 requirements. They provide prescriptive guidance for system hardening across all major platforms.
+            </p>
           </div>
         </div>
 
         {/* Summary Stats */}
         <div className="mt-6 panel p-6 hover-glow">
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="text-3xl font-display font-bold text-signal-cyan mb-2">247</div>
-              <div className="text-xs uppercase tracking-widest text-signal-dim">Total Infrastructure Assets</div>
-            </div>
+          <div className="grid md:grid-cols-3 gap-6 text-center">
             <div>
               <div className="text-3xl font-display font-bold text-signal-red mb-2">1,847</div>
-              <div className="text-xs uppercase tracking-widest text-signal-dim">2026 Vulnerabilities</div>
-            </div>
-            <div>
-              <div className="text-3xl font-display font-bold text-signal-green mb-2">3.2d</div>
-              <div className="text-xs uppercase tracking-widest text-signal-dim">Avg Remediation Time</div>
+              <div className="text-xs uppercase tracking-widest text-signal-dim">2026 Vulnerabilities Tracked</div>
             </div>
             <div>
               <div className="text-3xl font-display font-bold text-signal-amber mb-2">16</div>
-              <div className="text-xs uppercase tracking-widest text-signal-dim">CIS Benchmarks Monitored</div>
+              <div className="text-xs uppercase tracking-widest text-signal-dim">CIS Benchmarks Covered</div>
+            </div>
+            <div>
+              <div className="text-3xl font-display font-bold text-signal-cyan mb-2">∞</div>
+              <div className="text-xs uppercase tracking-widest text-signal-dim">Threat Knowledge Updated</div>
             </div>
           </div>
           <div className="mt-4 pt-4 border-t border-void-line text-center text-xs text-slate-500">
-            Last infrastructure scan: <span className="text-signal-cyan font-mono">2026-08-22 14:32 UTC</span> · 
-            Next scheduled: <span className="text-signal-green font-mono">2026-08-29 02:00 UTC</span>
+            Last updated: <span className="text-signal-cyan font-mono">2026-08-22 17:26 UTC</span>
           </div>
         </div>
       </div>
