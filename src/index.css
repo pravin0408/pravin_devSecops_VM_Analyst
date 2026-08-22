@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-void text-slate-200 font-mono antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(47,224,255,0.10), transparent),
+      linear-gradient(rgba(47,224,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47,224,255,0.05) 1px, transparent 1px);
+    background-size: auto, 42px 42px, 42px 42px;
+  }
+  ::selection {
+    @apply bg-signal-cyan/30 text-white;
+  }
+  :focus-visible {
+    outline: 2px solid #2fe0ff;
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #05080c; }
+  ::-webkit-scrollbar-thumb { background: #16293a; border: 2px solid #05080c; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #1e3a4f; }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] tracking-[0.28em] uppercase text-signal-cyan/80;
+  }
+  .panel {
+    @apply bg-void-panel/80 border border-void-line rounded-sm backdrop-blur-sm;
+  }
+  .btn-console {
+    @apply font-mono text-xs uppercase tracking-widest px-4 py-2 border border-signal-cyan/40 text-signal-cyan hover:bg-signal-cyan/10 hover:shadow-glowcyan transition-all duration-200;
+  }
+  .severity-critical { @apply text-signal-red border-signal-red/40 bg-signal-red/10; }
+  .severity-high { @apply text-signal-amber border-signal-amber/40 bg-signal-amber/10; }
+  .severity-medium { @apply text-signal-cyan border-signal-cyan/40 bg-signal-cyan/10; }
+  .severity-low { @apply text-signal-dim border-signal-dim/40 bg-signal-dim/10; }
+}

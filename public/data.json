@@ -1,0 +1,62 @@
+{
+  "profile": {
+    "name": "Pravin",
+    "role": "DevSecOps Engineer",
+    "tagline": "Securing the pipeline, not just the perimeter.",
+    "location": "India",
+    "links": {
+      "github": "https://github.com/pravin0408",
+      "linkedin": "https://www.linkedin.com/in/pravin-pp/"
+    }
+  },
+  "certifications": [
+    {
+      "id": "cert-website-hacking",
+      "name": "Website Hacking / Penetration Testing",
+      "issuer": "Udemy",
+      "date": "2022-09-28",
+      "verificationId": "UC-094e9073-470f-4f09-9400-b1aa6037461e",
+      "image": "/assets/certs/website-hacking-pentest-udemy.png",
+      "category": "Offensive Security",
+      "credentialUrl": "https://www.udemy.com/certificate/UC-094e9073-470f-4f09-9400-b1aa6037461e/"
+    },
+    {
+      "id": "cert-devsecops-basics",
+      "name": "DevSecOps for the Absolute Beginners - Hands On Demos",
+      "issuer": "Udemy",
+      "date": "2025-03-18",
+      "verificationId": "UC-45f55c95-2700-465f-8e58-949e900c05b4",
+      "image": "/assets/certs/devsecops-basics-udemy.png",
+      "category": "DevSecOps",
+      "credentialUrl": "https://www.udemy.com/certificate/UC-45f55c95-2700-465f-8e58-949e900c05b4/"
+    },
+    {
+      "id": "cert-stride-threat-modeling",
+      "name": "Threat Modeling using STRIDE Masterclass - 2025",
+      "issuer": "Udemy",
+      "date": "2025-03-13",
+      "verificationId": "UC-a847f63b-3235-4032-ada4-db28f2446905",
+      "image": "/assets/certs/stride-threat-modeling-udemy.png",
+      "category": "Threat Modeling",
+      "credentialUrl": "https://www.udemy.com/certificate/UC-a847f63b-3235-4032-ada4-db28f2446905/"
+    },
+    {
+      "id": "cert-checkmarx-owasp",
+      "name": "OWASP: Top 10 for Decision Makers",
+      "issuer": "Checkmarx Codebashing",
+      "date": "",
+      "verificationId": "",
+      "image": "/assets/certs/checkmarx_owasp_top10.png",
+      "category": "Secure Coding",
+      "credentialUrl": "https://www.codebashing.com"
+    }
+  ],
+  "timeline": [
+    { "id": "t1", "type": "certification", "date": "2022-09-28", "title": "Website Hacking / Penetration Testing", "detail": "Udemy — z Security course covering web app pentesting fundamentals." },
+    { "id": "t2", "type": "project", "date": "2023-06-30", "title": "CI/CD Hardening Initiative", "detail": "Introduced SAST gates into GitLab pipelines for 6 services." },
+    { "id": "t3", "type": "project", "date": "2024-10-15", "title": "DAST Automation Rollout", "detail": "Automated OWASP ZAP baseline scans on every merge request." },
+    { "id": "t4", "type": "certification", "date": "2025-03-13", "title": "Threat Modeling using STRIDE Masterclass", "detail": "Udemy — applied STRIDE methodology to design-phase threat modeling." },
+    { "id": "t5", "type": "certification", "date": "2025-03-18", "title": "DevSecOps for the Absolute Beginners", "detail": "Udemy — hands-on DevSecOps tooling and pipeline demos." },
+    { "id": "t6", "type": "project", "date": "2025-09-01", "title": "Secrets-Scanning Gate", "detail": "Blocked plaintext credential commits repo-wide via pre-receive hooks." }
+  ]
+}
