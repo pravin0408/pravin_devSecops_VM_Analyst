@@ -7,6 +7,7 @@ const links = [
   { to: '/security', label: 'Security', code: '02' },
   { to: '/evidence', label: 'Evidence', code: '03' },
   { to: '/automation', label: 'Automation', code: '04' },
+  { to: '/contact', label: 'Connect', code: '05' },
 ]
 
 export default function Navbar() {
