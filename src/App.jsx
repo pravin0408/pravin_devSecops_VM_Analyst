@@ -6,6 +6,7 @@ import Learn from './pages/Learn.jsx'
 import SAST from './pages/SAST.jsx'
 import DAST from './pages/DAST.jsx'
 import Pentesting from './pages/Pentesting.jsx'
+import SecurityAnalysis from './pages/SecurityAnalysis.jsx'
 import EvidenceDashboard from './components/EvidenceDashboard.jsx'
 import TerminalShowcase from './components/TerminalShowcase.jsx'
 
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/learn/sast" element={<SAST />} />
           <Route path="/learn/dast" element={<DAST />} />
           <Route path="/learn/pentesting" element={<Pentesting />} />
+          <Route path="/security" element={<SecurityAnalysis />} />
           <Route path="/evidence" element={<EvidenceDashboard />} />
           <Route path="/automation" element={<TerminalShowcase standalone />} />
         </Routes>

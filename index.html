@@ -3,11 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://services.nvd.nist.gov; frame-ancestors 'none';" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+    
     <title>Pravin // DevSecOps Operations Console</title>
-    <meta name="description" content="DevSecOps engineer portfolio — vulnerability research, application security automation, and certification evidence, presented as an interactive operations console." />
+    <meta name="description" content="DevSecOps engineer portfolio — vulnerability research, application security automation, and security analysis, presented as an interactive operations console." />
+    <meta name="theme-color" content="#05080c" />
+    <meta name="color-scheme" content="dark" />
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" integrity="sha384-ZRC/pj1i6FaKrZFgJTxyBDu1xJBDEEo0F1fQX7fxD/jZnEKDj5gR4rGXTXy9LfDq" crossorigin="anonymous" />
   </head>
   <body class="bg-void text-slate-200">
     <div id="root"></div>
