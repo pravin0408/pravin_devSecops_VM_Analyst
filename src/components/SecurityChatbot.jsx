@@ -269,7 +269,7 @@ export default function SecurityChatbot() {
     {
       id: 1,
       type: 'bot',
-      text: 'Hello! 👋 I\'m your Security Assistant. I can help you with questions about SAST, DAST, Penetration Testing, Tenable, DevSecOps, OWASP Top 10, and LLM Security. What would you like to know?',
+      text: 'Hello! 👋 I\'m Pratibhu, your DevSecOps Security Assistant. I can help you with questions about SAST, DAST, Penetration Testing, Tenable, DevSecOps, OWASP Top 10, and LLM Security. What would you like to know?',
       timestamp: new Date()
     }
   ])
@@ -372,9 +372,9 @@ Try asking me a specific question like:
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-signal-cyan rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg hover:bg-signal-cyan/90 transition-all transform hover:scale-110"
-        title="Security Assistant"
+        title="Pratibhu - Security Assistant"
       >
-        💬
+        🛡️
       </button>
 
       {/* Chat Window */}
@@ -386,8 +386,8 @@ Try asking me a specific question like:
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-signal-green rounded-full animate-pulse" />
                 <div>
-                  <h3 className="font-display text-sm font-600 text-white">Security Assistant</h3>
-                  <p className="text-xs text-signal-dim">AI-powered Q&A</p>
+                  <h3 className="font-display text-sm font-600 text-white">Pratibhu</h3>
+                  <p className="text-xs text-signal-dim">DevSecOps Security Assistant</p>
                 </div>
               </div>
               <button
@@ -456,7 +456,7 @@ Try asking me a specific question like:
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about security..."
+                placeholder="Ask Pratibhu about security..."
                 className="flex-1 px-3 py-2 bg-void border border-void-line rounded text-sm text-white placeholder-slate-500 focus:border-signal-cyan focus:outline-none transition-colors"
               />
               <button
