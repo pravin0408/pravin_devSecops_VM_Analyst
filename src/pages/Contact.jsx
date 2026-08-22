@@ -24,7 +24,8 @@ export default function Contact() {
     setIsSubmitting(true)
 
     try {
-      // Using Formspree.io for email forwarding (no backend required)\n      const response = await fetch('https://formspree.io/f/moeabrpr', {
+      // Using Formspree.io for email forwarding (no backend required)
+      const response = await fetch('https://formspree.io/f/moeabrpr', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
