@@ -260,87 +260,16 @@ Security best practices:
 6. Regular security assessments
 7. User education on LLM limitations
 8. Data privacy and compliance`
-  },
-  infrastructure: {
-    keywords: ['infrastructure', 'servers', 'network', 'cloud', 'hardening', 'baseline'],
-    response: `Infrastructure security involves securing servers, networks, and cloud resources.
-
-Areas:
-• Operating system hardening (CIS benchmarks)
-• Network segmentation and firewalls
-• Access control (authentication, authorization)
-• Patch management
-• Configuration management
-• Cloud security (AWS, Azure, GCP)
-• Container security (Docker, Kubernetes)
-
-CIS Benchmarks:
-• Prescriptive security configuration guidelines
-• Available for all major platforms
-• Multi-level (L1, L2)
-• Aligned with NIST, DISA STIGs
-
-Common findings:
-• Unpatched systems
-• Weak cryptography
-• Unnecessary services enabled
-• Default credentials
-• Missing security updates
-• Insecure configurations
-
-Remediation:
-• Apply security patches regularly
-• Follow hardening guides
-• Enable security features
-• Implement least privilege
-• Regular audits and compliance checks`
-  },
-  vulnerability: {
-    keywords: ['vulnerability', 'cve', 'weakness', 'bug', 'exploit', 'risk', 'severity'],
-    response: `Vulnerabilities are weaknesses that can be exploited to compromise security.
-
-Terminology:
-• Vulnerability: A weakness in code/config
-• Exploit: Code/technique to leverage vulnerability
-• CVE: Common Vulnerabilities and Exposures identifier
-• CVSS: Score indicating severity (0-10)
-
-Severity ratings:
-• Critical (9.0-10.0): Immediate action needed
-• High (7.0-8.9): Urgent remediation required
-• Medium (4.0-6.9): Should be fixed soon
-• Low (0.1-3.9): Track and manage
-• Info (0.0): Informational only
-
-Vulnerability lifecycle:
-1. Discovery: Found by security researchers
-2. Responsible disclosure: Vendor notified
-3. Patch development: Fix created
-4. Release: Patch published
-5. Deployment: Organizations apply patch
-
-Risk assessment:
-• Severity (CVSS score)
-• Exploitability (how easy to exploit)
-• Impact (damage if exploited)
-• Prevalence (how common in wild)
-
-Management:
-• Vulnerability scanning
-• Prioritization
-• Patch management
-• Testing
-• Verification
-• Compliance tracking`
   }
 }
 
 export default function SecurityChatbot() {
+  const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: 'bot',
-      text: 'Hello! 👋 I\'m your Security Assistant. I can help you with questions about SAST, DAST, Penetration Testing, Tenable, DevSecOps, OWASP Top 10, LLM Security, and Infrastructure Security. What would you like to know?',
+      text: 'Hello! 👋 I\'m your Security Assistant. I can help you with questions about SAST, DAST, Penetration Testing, Tenable, DevSecOps, OWASP Top 10, and LLM Security. What would you like to know?',
       timestamp: new Date()
     }
   ])
@@ -400,7 +329,6 @@ I can help with the following topics:
 • DevSecOps & CI/CD Security
 • OWASP Top 10 Web Vulnerabilities
 • LLM Security & AI Risks
-• Infrastructure Security & Hardening
 
 Try asking me a specific question like:
 "What is SAST?" or "Explain OWASP Top 10" or "How does DevSecOps work?"`
@@ -423,111 +351,125 @@ Try asking me a specific question like:
     'Explain DAST',
     'OWASP Top 10',
     'DevSecOps workflow',
-    'Tenable vulnerability scan',
-    'LLM security risks',
-    'Penetration testing phases',
-    'CIS Benchmarks'
+    'Tenable scan',
+    'LLM security',
+    'Pentesting phases'
   ]
 
   const handleSuggestedQuestion = (question) => {
     setInput(question)
-    // Trigger send after setting input
     setTimeout(() => {
-      const event = new Event('submit', { bubbles: true })
-      document.querySelector('form').dispatchEvent(event)
+      const form = document.querySelector('form[data-chatbot-form]')
+      if (form) {
+        form.dispatchEvent(new Event('submit', { bubbles: true }))
+      }
     }, 0)
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 max-w-full z-40 flex flex-col">
+    <>
+      {/* Chatbot Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-signal-cyan rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg hover:bg-signal-cyan/90 transition-all transform hover:scale-110"
+        title="Security Assistant"
+      >
+        💬
+      </button>
+
       {/* Chat Window */}
-      <div className="bg-void border border-void-line rounded-sm shadow-2xl flex flex-col h-96 max-h-screen">
-        {/* Header */}
-        <div className="border-b border-void-line p-4 bg-void-panel/80 rounded-t-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-signal-green rounded-full animate-pulse" />
-            <div>
-              <h3 className="font-display text-sm font-600 text-white">Security Assistant</h3>
-              <p className="text-xs text-signal-dim">AI-powered security Q&A</p>
+      {isOpen && (
+        <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-24px)] z-50 flex flex-col h-[500px] rounded-lg shadow-2xl overflow-hidden border border-signal-cyan/30 bg-void">
+          {/* Header */}
+          <div className="border-b border-void-line p-4 bg-void-panel/80">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-signal-green rounded-full animate-pulse" />
+                <div>
+                  <h3 className="font-display text-sm font-600 text-white">Security Assistant</h3>
+                  <p className="text-xs text-signal-dim">AI-powered Q&A</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((msg) => (
               <div
-                className={`max-w-xs px-4 py-2 rounded-sm text-sm leading-relaxed ${
-                  msg.type === 'user'
-                    ? 'bg-signal-cyan/20 border border-signal-cyan/40 text-white'
-                    : 'bg-void-panel border border-void-line text-slate-300'
-                }`}
+                key={msg.id}
+                className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {msg.text}
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-void-panel border border-void-line px-4 py-2 rounded-sm">
-                <div className="flex gap-2">
-                  <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce delay-100" />
-                  <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce delay-200" />
+                <div
+                  className={`max-w-xs px-4 py-2 rounded-lg text-sm leading-relaxed ${
+                    msg.type === 'user'
+                      ? 'bg-signal-cyan/20 border border-signal-cyan/40 text-white'
+                      : 'bg-void-panel border border-void-line text-slate-300'
+                  }`}
+                >
+                  {msg.text}
                 </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-void-panel border border-void-line px-4 py-2 rounded-lg">
+                  <div className="flex gap-2">
+                    <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce delay-100" />
+                    <div className="w-2 h-2 bg-signal-cyan rounded-full animate-bounce delay-200" />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Suggested Questions */}
+          {messages.length === 1 && (
+            <div className="px-4 py-2 border-t border-void-line bg-void-panel/50">
+              <p className="text-xs text-signal-dim font-semibold mb-2">Try asking:</p>
+              <div className="flex flex-wrap gap-2">
+                {suggestedQuestions.slice(0, 3).map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => handleSuggestedQuestion(q)}
+                    className="text-xs px-2 py-1 bg-void border border-void-line text-signal-cyan hover:border-signal-cyan/60 rounded transition-colors"
+                  >
+                    {q}
+                  </button>
+                ))}
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
-        </div>
 
-        {/* Suggested Questions */}
-        {messages.length === 1 && (
-          <div className="px-4 py-3 border-t border-void-line max-h-24 overflow-y-auto">
-            <p className="text-xs text-signal-dim font-semibold mb-2">Quick questions:</p>
-            <div className="flex flex-wrap gap-2">
-              {suggestedQuestions.slice(0, 4).map((q) => (
-                <button
-                  key={q}
-                  onClick={() => handleSuggestedQuestion(q)}
-                  className="text-xs px-2 py-1 bg-void-panel border border-void-line text-signal-cyan hover:border-signal-cyan/60 rounded-sm transition-colors"
-                >
-                  {q}
-                </button>
-              ))}
+          {/* Input Form */}
+          <form onSubmit={handleSendMessage} data-chatbot-form className="border-t border-void-line p-4 bg-void-panel/80">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask about security..."
+                className="flex-1 px-3 py-2 bg-void border border-void-line rounded text-sm text-white placeholder-slate-500 focus:border-signal-cyan focus:outline-none transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                className="px-3 py-2 bg-signal-cyan/20 border border-signal-cyan/40 text-signal-cyan hover:bg-signal-cyan/30 rounded text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Send
+              </button>
             </div>
-          </div>
-        )}
-
-        {/* Input Form */}
-        <form onSubmit={handleSendMessage} className="border-t border-void-line p-4 bg-void-panel/80 rounded-b-sm">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about security..."
-              className="flex-1 px-3 py-2 bg-void border border-void-line rounded-sm text-sm text-white placeholder-slate-500 focus:border-signal-cyan focus:outline-none transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              className="px-3 py-2 bg-signal-cyan/20 border border-signal-cyan/40 text-signal-cyan hover:bg-signal-cyan/30 rounded-sm text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Send
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Info */}
-      <p className="text-xs text-signal-dim mt-2 text-right">
-        💬 AI Security Chatbot
-      </p>
-    </div>
+          </form>
+        </div>
+      )}
+    </>
   )
 }
